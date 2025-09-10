@@ -1,0 +1,49 @@
+# ----------------------------
+# Python
+# ----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+
+# ----------------------------
+# Project-specific
+# ----------------------------
+# Logs
+data/logs/*.log
+
+# Weekly outputs (keep CSV/JSON history, but ignore working temp)
+data/weekly/*_temp.*
+
+# OCR intermediate images
+images/inprogress.png
+images/*.tmp
+
+# Frontend build cache
+frontend/node_modules/
+frontend/dist/
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ----------------------------
+# Secrets (if any)
+# ----------------------------
+*.env

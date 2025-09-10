@@ -1,0 +1,2 @@
+# This file stores weekly results (legacy format).
+# It looks like a plain-text dump of the admin results.
