@@ -1,5 +1,8 @@
 name: Update Stats
 
+permissions:
+  contents: write # <-- allow workflow to commit & push changes
+
 on:
   schedule:
     - cron: "0 2 * * *" # run every day at 02:00 UTC
