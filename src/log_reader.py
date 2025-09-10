@@ -6,7 +6,7 @@ Parses CS 1.6 server logs and extracts admin actions:
 
 Outputs:
 - JSON + CSV in data/weekly/
-- Latest JSON copied to frontend/data/ for charts
+- Latest JSON copied to docs/data/ for charts
 """
 
 import os
@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 
 LOG_DIR = os.path.join("data", "logs")
 DATA_DIR = os.path.join("data", "weekly")
-FRONTEND_DATA_DIR = os.path.join("frontend", "data")
+FRONTEND_DATA_DIR = os.path.join("docs", "data")
 ADMINS_FILE = os.path.join("data", "admins.txt")
 
 # Regex patterns
@@ -80,6 +80,11 @@ def main():
         print("⚠️ No admins loaded. Check data/admins.txt")
         return
 
+    if not os.path.exists(LOG_DIR):
+        print(f"⚠️ Log directory not found: {LOG_DIR}. Skipping log parsing.")
+        os.makedirs(LOG_DIR, exist_ok=True)  # create empty folder so it's tracked
+        return
+
     all_stats = []
     for filename in os.listdir(LOG_DIR):
         if filename.endswith(".log"):
@@ -96,11 +101,11 @@ def main():
     save_json(merged, out_json)
     save_csv(merged, out_csv)
 
-    # Copy to frontend
+    # Copy to docs (for GitHub Pages)
     save_json(merged, os.path.join(FRONTEND_DATA_DIR, "admin_actions.json"))
 
     print(f"✅ Admin actions parsed and saved → {out_json}, {out_csv}")
-    print(f"✅ Frontend updated → frontend/data/admin_actions.json")
+    print(f"✅ Frontend updated → {os.path.join(FRONTEND_DATA_DIR, 'admin_actions.json')}")
 
 if __name__ == "__main__":
     main()
