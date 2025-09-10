@@ -1,7 +1,7 @@
 name: Update Stats
 
 permissions:
-  contents: write # <-- allow workflow to commit & push changes
+  contents: write # allow workflow to commit & push changes
 
 on:
   schedule:
@@ -36,6 +36,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           git add data/weekly/*.json data/weekly/*.csv docs/data/*.json
           git commit -m "Auto-update stats [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin main
