@@ -1,2 +1,6 @@
 flask
 pandas
+pillow
+easyocr
+torch
+requests
