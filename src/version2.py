@@ -19,7 +19,7 @@ except Exception:
 HOST = "149.202.87.35:27015"
 START = "-1w"
 OUT_DIR = "images"
-DATA_DIR = "docs/data"
+DATA_DIR = os.path.join("docs", "data")
 CROP_BOX = (39, 0, 260, 152)
 SCALE_FACTOR = 2
 
@@ -58,11 +58,13 @@ def ocr_total_minutes(reader, image_path: str) -> int:
                 pass
     return sum(nums) if nums else 0
 
-def load_admins(path="admins.txt"):
+def load_admins(path=os.path.join("data", "admins.txt")):
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Admin file not found: {path}")
     with open(path, encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip()]
 
-def load_history(path=f"{DATA_DIR}/leaderboard_history.csv"):
+def load_history(path=os.path.join(DATA_DIR, "leaderboard_history.csv")):
     history = {}
     if os.path.exists(path):
         with open(path, newline="", encoding="utf-8") as f:
@@ -70,7 +72,8 @@ def load_history(path=f"{DATA_DIR}/leaderboard_history.csv"):
                 history[row["name"]] = int(row["minutes"])
     return history
 
-def save_history(history, path=f"{DATA_DIR}/leaderboard_history.csv"):
+def save_history(history, path=os.path.join(DATA_DIR, "leaderboard_history.csv")):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["name", "minutes"])
         w.writeheader()
@@ -98,7 +101,7 @@ def main():
     save_history(history)
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    weekly_path = f"{DATA_DIR}/{now}_weekly_results.csv"
+    weekly_path = os.path.join(DATA_DIR, f"{now}_weekly_results.csv")
     with open(weekly_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["name", "minutes"])
         w.writeheader()
@@ -106,7 +109,8 @@ def main():
             w.writerow(row)
 
     # Also dump JSON
-    with open("weekly_results.json", "w", encoding="utf-8") as f:
+    weekly_json = os.path.join(DATA_DIR, "weekly_results.json")
+    with open(weekly_json, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
 
 if __name__ == "__main__":
